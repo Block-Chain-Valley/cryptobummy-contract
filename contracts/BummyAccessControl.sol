@@ -5,10 +5,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "./Interface/BummyAccessInterface.sol";
 contract BummyAccessControl is Pausable,BummyAccessInterface{
 
-    /// @dev 새로운 컨트랙트 주소로 컨트랙트 업그레이드시 발생하는 이벤트
-    /// 오류 수정이나 새로운 버전이 나왔을때 컨트랙트를 업그레이드하는 상황에 발생하게 됩니다.
-    event ContractUpgrade(address newContract); 
-
+    
     // The addresses of the accounts (or contracts) that can execute actions within each roles.
     address public ceoAddress;//컨트랙트에서 import하는 컨트랙트 주소를 세팅해주는 역할의 계정
     address public cfoAddress;//kitty Core 컨트랙트에서 돈을 인출하는 역할의 계정 

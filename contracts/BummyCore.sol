@@ -23,17 +23,6 @@ contract BummyCore is BummyMinting, BummyCoreInterface{
         );
     }
 
-    /// @dev Used to mark the smart contract as upgraded, in case there is a serious
-    ///  breaking bug. This method does nothing but keep track of the new contract and
-    ///  emit a message indicating that the new address is set. It's up to clients of this
-    ///  contract to update to the new contract address in that case. (This contract will
-    ///  be paused indefinitely if such an upgrade takes place.)
-    /// @param _v2Address new address
-    function setNewAddress(address _v2Address) external onlyCEO whenPaused {
-        newContractAddress = BummyCoreInterface(_v2Address);
-        emit ContractUpgrade(_v2Address);
-    }
-
     /// @notice Returns all the relevant information about a specific bummy.
     /// @param _id The ID of the bummy of interest.
     function getBummy(
@@ -42,7 +31,7 @@ contract BummyCore is BummyMinting, BummyCoreInterface{
         external
         view
         returns (
-            bool isExhausted,
+            bool isCheering,
             bool isReady,
             uint256 cooldownIndex,
             uint256 nextActionAt,
@@ -57,7 +46,7 @@ contract BummyCore is BummyMinting, BummyCoreInterface{
         Bummy storage bum = bummies[_id];
 
         // if this variable is 0 then it's not Exhausted
-        isExhausted = (bum.cheeringWithId != 0);
+        isCheering = (bum.cheeringWithId != 0);
         isReady = (bum.cooldownEndTime <= block.timestamp);
         cooldownIndex = uint256(bum.cooldownIndex);
         nextActionAt = uint256(bum.cooldownEndTime);

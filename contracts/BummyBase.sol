@@ -12,7 +12,7 @@ contract BummyBase is BummyAccessControl, ERC721Enumerable,BummyBaseInterface {
 
     constructor() ERC721 (_name, _symbol) {}
 
-    event Birth(address indexed owner, uint256 BummyId, uint256 momId, uint256 dadId, uint256 genes);
+    event Invite(address indexed owner, uint256 BummyId, uint256 momId, uint256 dadId, uint256 genes);
 
     /*** DATA TYPES ***/
 
@@ -68,6 +68,7 @@ contract BummyBase is BummyAccessControl, ERC721Enumerable,BummyBaseInterface {
     mapping (uint256 => address) public cheerAllowedToAddress;
 
     
+    
     /// @dev _tokenId에 해당하는 Bummy를 _from에서 _to로 보냅니다.
     /// 
     function _transfer(address _from, address _to, uint256 _tokenId) override internal virtual {
@@ -117,7 +118,7 @@ contract BummyBase is BummyAccessControl, ERC721Enumerable,BummyBaseInterface {
         require(newBummyId <= 2**32 - 1 );
 
         // emit the birth event
-        emit Birth(
+        emit Invite(
             _owner,
             newBummyId,
             uint256(_bummy.MomId),

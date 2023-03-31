@@ -1,28 +1,13 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity ^0.8.17;
-import './Info/BummyInfo.sol';
+
 import './Interface/BummyCheeringInterface.sol';
 import "./Interface/BummyCoreInterface.sol";
 
 import './BummyOwnership.sol';
 import 'hardhat/console.sol';
-contract BummyCheering is BummyOwnership, BummyCheeringInterface {
+contract BummyCheering is BummyOwnership{
     event Cheering(address owner, uint256 momId, uint256 dadId);
-
-    /// @dev 무작위
-    BummyInfoInterface public bummyGene;
-
-    /// @dev Update the address of the genetic contract, can only be called by the CEO.
-    /// @param _address An address of a GeneScience contract instance to be used from this point forward.
-    function setBummyInfoAddress(address _address) external onlyCEO {
-        BummyInfoInterface candidateContract = BummyInfoInterface(_address);
-
-        // NOTE: verify that a contract is what we expect
-        require(candidateContract.isBummyInfo());
-
-        // Set the new contract address
-        bummyGene = candidateContract;
-    }
 
     /// @dev Check if a dad has authorized breeding with this mom. True if both dad
     ///  and mom have the same owner, or if the dad has given siring permission to
@@ -239,7 +224,7 @@ contract BummyCheering is BummyOwnership, BummyCheeringInterface {
         if (dad.generation > mom.generation) {
             parentGen = dad.generation;
         }
-        uint randomNumber = uint(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, mom.genes)));
+        uint randomNumber = uint(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, mom.genes,block.coinbase)));
         
         uint256 childGenes =  mom.genes + dad.genes + randomNumber;
         

@@ -20,27 +20,6 @@ async function main() {
 
   console.log("NFT address:", bummyCoreNFT.address);
   console.log("Account Balance:", (await deployer.getBalance()).toString());
-
-  const BummyInfo: BummyInfo__factory = await ethers.getContractFactory(
-    "BummyInfo"
-  );
-  const bummyInfo: BummyInfo = await BummyInfo.deploy(bummyCoreNFT.address); //(address _privilegedBirtherAddress, address _bummyCoreAddress)
-
-  console.log("bummyInfo:", bummyInfo.address);
-
-  await bummyCoreNFT.setBummyInfoAddress(bummyInfo.address);
-  const bummyId1 = await bummyCoreNFT.createPromoBummy(1, deployer.address);
-  console.log("bummyId 1:", bummyId1);
-  console.log(
-    "bummyId 2:",
-    await bummyCoreNFT.createPromoBummy(2, deployer.address)
-  );
-  console.log(
-    "bummyId 3:",
-    await bummyCoreNFT.createPromoBummy(3, deployer.address)
-  );
-
-  await bummyCoreNFT.createFirstGen0Bummy();
 }
 main()
   .then(() => process.exit(0))

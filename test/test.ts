@@ -53,11 +53,11 @@ describe("BummyCore", async () => {
     await bummyCore.createFirstGen0Bummy();
     expect(await bummyCore.totalSupply()).to.eq(2);
     tokenId = await bummyCore.tokenOfOwnerByIndex(owner.address, 0);
-    console.log("tokenId of owner:", tokenId);
+    console.log("tokenId of owner:", tokenId.toString());
 
     await bummyCore.connect(addr1).createFirstGen0Bummy();
     tokenId = await bummyCore.tokenOfOwnerByIndex(addr1.address, 0);
-    console.log("tokenId of owner:", tokenId);
+    console.log("tokenId of owner:", tokenId.toString());
     expect(await bummyCore.totalSupply()).to.eq(3);
 
     await expect(
@@ -75,12 +75,15 @@ describe("BummyCore", async () => {
 
     await bummyCore.createPromoBummy(40, addr1.address);
     totalSupply = await bummyCore.totalSupply();
-    console.log("totalsupply:", totalSupply);
+    console.log("totalsupply:", totalSupply.toString());
     expect(await bummyCore.tokenOfOwnerByIndex(addr1.address, 0)).to.eq(2);
 
     await expect(bummyCore.connect(addr2).createPromoBummy(60, addr2.address))
       .to.be.reverted;
-    console.log("totalsupply:", await bummyCore.totalSupply());
+    console.log(
+      "totalsupply:",
+      await (await bummyCore.totalSupply()).toString()
+    );
   });
   it("Transfer Bummy to other", async () => {
     snapshot = await takeSnapshot();
@@ -92,7 +95,7 @@ describe("BummyCore", async () => {
 
     numOfBummy = await bummyCore.balanceOf(owner.address);
     numOfBummy1 = await bummyCore.balanceOf(addr1.address);
-    console.log("num of Bummy:", numOfBummy, numOfBummy1);
+    console.log("num of Bummy:", numOfBummy.toString(), numOfBummy1.toString());
 
     await snapshot.restore();
   });

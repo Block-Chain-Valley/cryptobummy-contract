@@ -205,6 +205,9 @@ contract BummyCheering is BummyOwnership{
     ) external whenNotPaused returns (uint256) {
         
         // Grab a reference to the mom in storage.
+        // COMM:
+        // 여기서 storage로 설정하면 아래에 mom관련 호출은 다 storage call이라서 가스비가 많이 들 것.
+        // 테스트 코드로 memory로 선언하는 것과 storage로 선언하는 것 차이 비교해보기!
         Bummy storage mom = bummies[_momId];
         
         // Check that the mom is a valid bum.

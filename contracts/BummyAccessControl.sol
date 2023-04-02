@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "./Interface/BummyAccessInterface.sol";
 contract BummyAccessControl is Pausable,BummyAccessInterface{
 
-    
+    // COMM: 어차피 address type이므로 변수명에서 "address" 빼도 좋을 듯.
     // The addresses of the accounts (or contracts) that can execute actions within each roles.
     address public ceoAddress;//컨트랙트에서 import하는 컨트랙트 주소를 세팅해주는 역할의 계정
     address public cfoAddress;//kitty Core 컨트랙트에서 돈을 인출하는 역할의 계정 
@@ -46,7 +46,6 @@ contract BummyAccessControl is Pausable,BummyAccessInterface{
         ceoAddress = _newCEO;
     }
 
-
     /// @dev Assigns a new address to act as the COO. Only available to the current CEO.
     /// @param _newCOO The address of the new COO
     function setCOO(address _newCOO) external onlyCEO {
@@ -54,6 +53,8 @@ contract BummyAccessControl is Pausable,BummyAccessInterface{
 
         cooAddress = _newCOO;
     }
+
+    // COMM: setCFO는 없나요?
 
 
     /// @dev Called by any "C-level" role to pause the contract. Used only when

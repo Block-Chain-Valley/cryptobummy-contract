@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity ^0.8.17;
 
-import './Interface/BummyCheeringInterface.sol';
+import "./Interface/BummyCheeringInterface.sol";
 import "./Interface/BummyCoreInterface.sol";
 
-import './BummyOwnership.sol';
-import 'hardhat/console.sol';
-contract BummyCheering is BummyOwnership{
+import "./BummyOwnership.sol";
+import "hardhat/console.sol";
+
+contract BummyCheering is BummyOwnership {
     event Cheering(address owner, uint256 momId, uint256 dadId);
 
     /// @dev Check if a dad has authorized breeding with this mom. True if both dad
@@ -203,23 +204,22 @@ contract BummyCheering is BummyOwnership{
     function inviteFriend(
         uint256 _momId
     ) external whenNotPaused returns (uint256) {
-        
         // Grab a reference to the mom in storage.
         // COMM:
         // 여기서 storage로 설정하면 아래에 mom관련 호출은 다 storage call이라서 가스비가 많이 들 것.
         // 테스트 코드로 memory로 선언하는 것과 storage로 선언하는 것 차이 비교해보기!
-        Bummy storage mom = bummies[_momId];
-        
+        Bummy memory mom = bummies[_momId];
+
         // Check that the mom is a valid bum.
         require(mom.birthTime != 0);
-        
+
         // Check that the mom is pregnant, and that its time has come!
         require(_isReadyToInviteFriend(mom)); //
 
         // Grab a reference to the dad in storage.
         uint256 dadId = mom.cheeringWithId;
 
-        Bummy storage dad = bummies[dadId];
+        Bummy memory dad = bummies[dadId];
 
         // Determine the higher generation number of the two parents
         uint16 parentGen = mom.generation;
@@ -227,14 +227,23 @@ contract BummyCheering is BummyOwnership{
         if (dad.generation > mom.generation) {
             parentGen = dad.generation;
         }
-        uint randomNumber = uint(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, mom.genes,block.coinbase)));
-        
-        uint256 childGenes =  mom.genes + dad.genes + randomNumber;
-        
-        
+        uint randomNumber = uint(
+            keccak256(
+                abi.encodePacked(
+                    block.timestamp,
+                    block.difficulty,
+                    msg.sender,
+                    mom.genes,
+                    block.coinbase
+                )
+            )
+        );
+
+        uint256 childGenes = mom.genes + dad.genes + randomNumber;
+
         // Make the new bummy!
         address owner = _ownerOf(_momId);
-        
+
         uint256 bummyId = _createBummy(
             _momId,
             mom.cheeringWithId,
@@ -242,14 +251,12 @@ contract BummyCheering is BummyOwnership{
             childGenes,
             owner
         );
-        
+
         // Clear the reference to dad from the mom (REQUIRED! Having cheeringWith
         // set is what marks a mom as being pregnant.)
-        delete mom.cheeringWithId;
+        delete bummies[_momId].cheeringWithId;
 
         // return the new bummy's ID
         return bummyId;
     }
-
-    
 }

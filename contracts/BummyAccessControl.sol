@@ -3,26 +3,17 @@ pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "./Interface/BummyAccessInterface.sol";
-contract BummyAccessControl is Pausable,BummyAccessInterface{
 
-    // COMM: 어차피 address type이므로 변수명에서 "address" 빼도 좋을 듯.
+contract BummyAccessControl is Pausable, BummyAccessInterface {
     // The addresses of the accounts (or contracts) that can execute actions within each roles.
-    address public ceoAddress;//컨트랙트에서 import하는 컨트랙트 주소를 세팅해주는 역할의 계정
-    address public cfoAddress;//kitty Core 컨트랙트에서 돈을 인출하는 역할의 계정 
-    address public cooAddress;//크립토키티의 전반적인 운영에 기여하는 계정
+    address public ceoAddress; //컨트랙트에서 import하는 컨트랙트 주소를 세팅해주는 역할의 계정
+    address public cooAddress; //크립토키티의 전반적인 운영에 기여하는 계정
 
     /// @dev Access modifier for CEO-only functionality
     modifier onlyCEO() {
         require(msg.sender == ceoAddress);
         _;
     }
-
-    /// @dev Access modifier for CFO-only functionality
-    modifier onlyCFO() {
-        require(msg.sender == cfoAddress);
-        _;
-    }
-
     /// @dev Access modifier for COO-only functionality
     modifier onlyCOO() {
         require(msg.sender == cooAddress);
@@ -30,11 +21,7 @@ contract BummyAccessControl is Pausable,BummyAccessInterface{
     }
 
     modifier onlyCLevel() {
-        require(
-            msg.sender == cooAddress ||
-            msg.sender == ceoAddress ||
-            msg.sender == cfoAddress
-        );
+        require(msg.sender == cooAddress || msg.sender == ceoAddress);
         _;
     }
 
@@ -53,9 +40,6 @@ contract BummyAccessControl is Pausable,BummyAccessInterface{
 
         cooAddress = _newCOO;
     }
-
-    // COMM: setCFO는 없나요?
-
 
     /// @dev Called by any "C-level" role to pause the contract. Used only when
     ///  a bug or exploit is detected and we need to limit damage.

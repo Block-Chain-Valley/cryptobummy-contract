@@ -6,9 +6,9 @@
     {
       "inputs": [
         {
-          "internalType": "uint256",
+          "internalType": "uint32",
           "name": "_id",
-          "type": "uint256"
+          "type": "uint32"
         }
       ],
       "name": "getBummy",
